@@ -29,11 +29,12 @@ public class App
     	System.out.println("Hello");
     	OkHttpClient httpClient = new OkHttpClient(); 
     	SendMailTLS mail= new SendMailTLS();
+    	String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBiZDEwY2JmMDM2OGQ2MWE0NDBiZjYxZjNiM2EyZDI0NGExODQ5NDcifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoidVNwWUVxMEhGWDFPMWJCbTg0cWJYZyIsImF1ZCI6Ijg0ODIzMjUxMTI0MC03M3JpM3Q3cGx2azk2cGo0Zjg1dWo4b3RkYXQyYWxlbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODA3OTQ1ODU2NTY4NDkyMzg3NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDgyMzI1MTEyNDAtNzNyaTN0N3Bsdms5NnBqNGY4NXVqOG90ZGF0MmFsZW0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6InNsYXNodHV0b3JpZWxAZ21haWwuY29tIiwiaWF0IjoxNDY5NTEwMDM5LCJleHAiOjE0Njk1MTM2Mzl9.Et5UvHejGvadenq2DQij3dARozKMMJzh4U3dPMMtZz4bRa6jX17lp4Ecn6Jiu_41RdjlH7cgM9HgDR-QYO9Lp8MZxdCHXzEUO_n-skD_T6Z_PDfW9riyu7iwAi8z_-323Lr5cZPuj6zWdvhN10SIGYB-pztU9OV4qozFxzB1JL_hrHlW-eLss8RceTkvmnzVBf1DGcrY5PCwmZWMTlKFsWpEcY9KjlFzZSpA8r_rC_Pz0KbfsrGpemKrUBNMsMOgZ4Ez5rmO_zho2eFO9nOL_k117yR1tHZaCcro73FhX18GDdz-gHsOjGfTiH_41woNKEQQRZsPuTPEbVBj1Th-xg";
     	
 		try {
-			AuthInfo auth = new GoogleLogin(httpClient).login("ADDRESS","MDP"); 
+			AuthInfo auth = new GoogleLogin(httpClient).login(token); 
 			PokemonGo go = new PokemonGo(auth,httpClient);
-			//go.setLocation( 48.8086335, 2.1335094999999455, 0);
+			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
 			go.setLocation(48.80962619260876, 2.134148, 0);
 			System.out.println("location : " + go.getLatitude() + "-"
 					+ go.getLongitude() + "-"
@@ -57,16 +58,23 @@ public class App
 							long pokemonId = result.getCapturedPokemonId();
 							List<Pokemon> pkl =
 									go.getInventories().getPokebank().getPokemons();
+							Boolean found = false;
 							for(Pokemon p : pkl){
-								if(p.getId() == pokemonId){
-									if(p.getCp() < 100 && 
-											go.getInventories().getPokebank().getPokemonByPokemonId(p.getPokemonId()).size() > 1){
+								if(p.getPokemonId() == pokemon.getPokemonId()){
+									//TODO DO NOT DELETE FIRST CATCHED POKEMON
+									if(p.getCp() < 250){
 										System.out.println(p.getNickname() + " has been transfered because of low cp : " 
 												+p.getCp());
 										p.transferPokemon();
+									}else{
+										System.out.println("Pokemon added to the collection, cp > 300");
 									}
+									found = true;
 									break;
 								}
+							}
+							if(!found){
+								System.out.println("Impossible to retrieve the pokemon in the bag...");
 							}
 						}
 					}else{
@@ -75,8 +83,8 @@ public class App
 				}
 			}
 		} catch (LoginFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mail.sendMailLoginException(e);
+			main(null);
 		} catch (RemoteServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
