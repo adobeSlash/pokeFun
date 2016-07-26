@@ -37,6 +37,7 @@ public class App
     {
     	PokeStats tracer = new PokeStats();
     	OkHttpClient httpClient = new OkHttpClient(); 
+    	OnGoogleAuthListener authListener;
     	
     	//Proxy worldline...
 //		OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -46,7 +47,7 @@ public class App
 //		    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     		
 		try {
-			OnGoogleAuthListener authListener = new OnGoogleAuthListener();		
+			authListener = new OnGoogleAuthListener();		
 			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener),httpClient);
 			
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
@@ -89,6 +90,7 @@ public class App
 			}
 		} catch (LoginFailedException e) {
 			logger.error(e.getLocalizedMessage());
+			
 		} catch (RemoteServerException e) {
 			logger.error(e.getLocalizedMessage());
 		}
