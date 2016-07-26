@@ -8,6 +8,7 @@ import POGOProtos.Inventory.Item.ItemAwardOuterClass.ItemAward;
 import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
 import POGOProtos.Networking.Responses.CatchPokemonResponseOuterClass.CatchPokemonResponse.CatchStatus;
 
+import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -16,6 +17,8 @@ import com.pokegoapi.api.map.pokemon.CatchResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.map.pokemon.EncounterResult;
 import com.pokegoapi.api.pokemon.Pokemon;
+import com.pokegoapi.auth.GoogleAuthJson;
+import com.pokegoapi.auth.GoogleAuthTokenJson;
 import com.pokegoapi.auth.GoogleCredentialProvider;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
@@ -29,7 +32,7 @@ public class App
     	System.out.println("Hello");
  
     	PokeStats tracer = new PokeStats();
-    	String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUwNzgyYmNmMGE5NzQxZTZiZjkwMjY2ZGMzNTY4YWE5MDc5MWYxNmYifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiTXRxZmJQN0t6ai1yN2JHT0tseC1oQSIsImF1ZCI6Ijg0ODIzMjUxMTI0MC03M3JpM3Q3cGx2azk2cGo0Zjg1dWo4b3RkYXQyYWxlbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODA3OTQ1ODU2NTY4NDkyMzg3NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDgyMzI1MTEyNDAtNzNyaTN0N3Bsdms5NnBqNGY4NXVqOG90ZGF0MmFsZW0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6InNsYXNodHV0b3JpZWxAZ21haWwuY29tIiwiaWF0IjoxNDY5NTUxMjQzLCJleHAiOjE0Njk1NTQ4NDN9.IkrbESWfm_9_jg48z5wpe5UZexmv1r8qbrwFPFPuM-Qg4tyQiqAMG02wTON_TpE1j7Cu7pmFl5gBRbwGaABUKVe1WXE2ETkwr3eCKUQYLTZZZmaxtlum5lH8tOZUtowsyADoPplo3UB8OB7FkZhPjhLQUwNV4uEmInkGdDQ368AIgdXxnR_q7bHPRKsP2gBcnpa6pgRP7vQcCj-Wxd8UArShfQYrSnvRCaBtqfnmAbvTy7qU3qxiergMyY-qQ9y-2hjAMys9wXtruEpwRzul5NDbjNb_50s5sfGP6Ewnd6vTMksaDUqQOR7tjN-tHll3Ls9ervB21v9KyFAyGbTkwg";
+    	String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBiZDEwY2JmMDM2OGQ2MWE0NDBiZjYxZjNiM2EyZDI0NGExODQ5NDcifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoieTJxcWNoZ3M4UDVkRW5RRHB2UXRRUSIsImF1ZCI6Ijg0ODIzMjUxMTI0MC03M3JpM3Q3cGx2azk2cGo0Zjg1dWo4b3RkYXQyYWxlbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODA3OTQ1ODU2NTY4NDkyMzg3NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDgyMzI1MTEyNDAtNzNyaTN0N3Bsdms5NnBqNGY4NXVqOG90ZGF0MmFsZW0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6InNsYXNodHV0b3JpZWxAZ21haWwuY29tIiwiaWF0IjoxNDY5NTU5NzQ4LCJleHAiOjE0Njk1NjMzNDh9.j_21lR26h1vbNznH1WqGG2HwGeDfW9MToqxmNBogERONic7dFdP6Wh04LylO60T6FwQ9Ar_0OstsrhhgBvJHPLwYBqx07ei-vzUBJoIkRxOhSf80Sr__GC8IPqA1_8aem2u9v51Hx3fncxE2rnCOWBjyUHELqRvAlXsDs0lDY2eDpvwuACtuiEvtkkwP-Z70RlWkm2rn4owbCNtjH-fLLpj-nGAm0Vz_zwCJ-HXxALGpFSLp-HX-T8gMMqO9fUYaghoNxA3rfcCOudPTM9jm2G_BeOxMZH6uaZwz7XbJGhDeV-JOTPtojuvDB2E-A2pvPy39bnENn_dEgHX07laL9A";
 
     	OkHttpClient httpClient = new OkHttpClient(); 
     	
@@ -41,8 +44,9 @@ public class App
 //		    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     		
 		try {
+			OnGoogleAuthListener authListener = new OnGoogleAuthListener();
 			
-			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient,token),httpClient);
+			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener),httpClient);
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
 			//go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
 			//go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
