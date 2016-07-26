@@ -3,11 +3,15 @@ package com.adobeslash.pokeutils;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import com.pokegoapi.api.PokemonGo;
 
 import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
 
 public class PokeStats {
+	
+	final static Logger logger = Logger.getLogger(PokeStats.class);
 	
 	private HashMap<String, Integer> catched;
 	private int totalAmount;
@@ -43,16 +47,16 @@ public class PokeStats {
 	
 	public void printStats(){
 		Iterator it = catched.keySet().iterator();
-		System.out.println("--------------------------- START STATS -----------------------");
+		logger.info("--------------------------- START STATS -----------------------");
 		while(it.hasNext()){
 			Object cle = it.next(); 
 			Object value = catched.get(cle); 
-			System.out.println("Id : " + cle + " nb catched : " + value);
+			logger.info("Id : " + cle + " nb catched : " + value);
 			if(go != null){
-				System.out.println("pokeball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
-				System.out.println("superball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount());
+				logger.info("pokeball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
+				logger.info("superball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount());
 			}
 		}
-		System.out.println("--------------------------- END STATS -----------------------");
+		logger.info("--------------------------- END STATS -----------------------");
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import POGOProtos.Enums.PokemonIdOuterClass.PokemonId;
 import POGOProtos.Inventory.Item.ItemAwardOuterClass.ItemAward;
 import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
@@ -29,12 +31,11 @@ import okhttp3.OkHttpClient;
 
 public class App 
 {
+	final static Logger logger = Logger.getLogger(App.class);
+	
     public static void main( String[] args ) throws InterruptedException
     {
-    	System.out.println("Hello");
- 
     	PokeStats tracer = new PokeStats();
-
     	OkHttpClient httpClient = new OkHttpClient(); 
     	
     	//Proxy worldline...
@@ -45,8 +46,7 @@ public class App
 //		    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     		
 		try {
-			OnGoogleAuthListener authListener = new OnGoogleAuthListener();
-			
+			OnGoogleAuthListener authListener = new OnGoogleAuthListener();		
 			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener),httpClient);
 			
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
@@ -55,38 +55,41 @@ public class App
 			//go.setLocation(48.856181844312594, 2.2977787494903623, 0); // Eiffel
 			//go.setLocation(48.863492, 2.327494, 0); // Jardin des Tuileries
 			go.setLocation(48.892416, 2.393335, 0); // La vilette
-			System.out.println("location : " + go.getLatitude() + "-"
+			logger.info("location : " + go.getLatitude() + "-"
 					+ go.getLongitude() + "-"
 					+ go.getAltitude() + "-");
-			System.out.println("profile : " + go.getPlayerProfile().getUsername());
+			logger.info("profile : " + go.getPlayerProfile().getUsername());
 			
 			while(true){
+				
 				Thread.sleep(120000);
-				System.out.println("scanned");
+				logger.info("start scan...");
+				
 				ArrayList <CatchablePokemon> catchables = (ArrayList<CatchablePokemon>) go.getMap().getCatchablePokemon();
 				for(CatchablePokemon pokemon : catchables){
-					System.out.println("catchables : " + pokemon.getPokemonId());
+					logger.info("catchables : " + pokemon.getPokemonId());
+					
 					EncounterResult encResult = pokemon.encounterPokemon();
-					// if encounter was succesful, catch
+					
 					if (encResult.wasSuccessful()) {
-						System.out.println("Encounted:" + pokemon.getPokemonId());
+						logger.info("Encounted:" + pokemon.getPokemonId());
 						CatchResult result = pokemon.catchPokemon();
-						System.out.println("Attempt to catch:" + pokemon.getPokemonId() + " " + result.getStatus());
+						logger.info("Attempt to catch:" + pokemon.getPokemonId() + " " + result.getStatus());
+						
 						if(result.getStatus().equals(CatchStatus.CATCH_SUCCESS)){
 							PokeHelper.askForTransfer(go, pokemon, tracer);
 						}
 					}else{
-						System.out.println("failed to catch pokemon");
+						logger.info("failed to catch pokemon");
 					}
 				}
 				
 				PokeHelper.lootNearestPokestop(go);			
 			}
 		} catch (LoginFailedException e) {
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (RemoteServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
     }
 }
