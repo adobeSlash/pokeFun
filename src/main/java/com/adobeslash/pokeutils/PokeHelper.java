@@ -1,4 +1,4 @@
-package com.adobeslash.pokefun;
+package com.adobeslash.pokeutils;
 
 import java.util.List;
 
