@@ -32,10 +32,10 @@ public class PokeStats {
 	
 	public void printStats(){
 		Iterator it = catched.keySet().iterator();
-		System.out.println("--------------------------- SATRT STATS -----------------------");
+		System.out.println("--------------------------- START STATS -----------------------");
 		while(it.hasNext()){
-			Object cle = it.next(); // tu peux typer plus finement ici
-			Object value = catched.get(cle); // tu peux typer plus finement ici
+			Object cle = it.next(); 
+			Object value = catched.get(cle); 
 			System.out.println("Id : " + cle + " nb catched : " + value);
 		}
 		System.out.println("--------------------------- END STATS -----------------------");

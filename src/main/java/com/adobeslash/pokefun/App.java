@@ -1,16 +1,11 @@
 package com.adobeslash.pokefun;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import POGOProtos.Inventory.Item.ItemAwardOuterClass.ItemAward;
 import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
-import POGOProtos.Inventory.Item.ItemTypeOuterClass.ItemType;
-import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 import POGOProtos.Networking.Responses.CatchPokemonResponseOuterClass.CatchPokemonResponse.CatchStatus;
 
 import com.adobeslash.pokeutils.PokeStats;
@@ -21,21 +16,12 @@ import com.pokegoapi.api.map.pokemon.CatchResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.map.pokemon.EncounterResult;
 import com.pokegoapi.api.pokemon.Pokemon;
-import com.pokegoapi.auth.GoogleLogin;
+import com.pokegoapi.auth.GoogleCredentialProvider;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
-import okhttp3.Authenticator;
-import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.Route;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args ) throws InterruptedException
@@ -44,7 +30,7 @@ public class App
  
     	SendMailTLS mail= new SendMailTLS();
     	PokeStats tracer = new PokeStats();
-    	String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBiZDEwY2JmMDM2OGQ2MWE0NDBiZjYxZjNiM2EyZDI0NGExODQ5NDcifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiNlhNY2pZYWFOSGhFMkwwV1pXWHJNUSIsImF1ZCI6Ijg0ODIzMjUxMTI0MC03M3JpM3Q3cGx2azk2cGo0Zjg1dWo4b3RkYXQyYWxlbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODA3OTQ1ODU2NTY4NDkyMzg3NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDgyMzI1MTEyNDAtNzNyaTN0N3Bsdms5NnBqNGY4NXVqOG90ZGF0MmFsZW0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6InNsYXNodHV0b3JpZWxAZ21haWwuY29tIiwiaWF0IjoxNDY5NTQzNjE2LCJleHAiOjE0Njk1NDcyMTZ9.BgcfC1vWNxzooYKx6MomRwpn12czTWxx-YzVSzzdgWl8Ep-oJgeZlfUQMfipIcdYuHmuZCzUpN8401s5kw6of91kZNtCjsCW6O0jvoDpxAiwUU_C8MX94o656Eq6W0b9ro53rFqynYl3ayICJyfWmbxTTbv_CYuLve-aiA9FQetNbLZ81B4bdrXzH-juzh6XDpO-x8bdV41z3Sy0Q-LiMxRHyHiNKgJx8jF9Cc0rGvVihNOvHuiXFPSevEYa67mORbAnigWdHMi6ij39Fdv4XKXGnlNVeaDDeMU9bpBk6-ji2Q5LUrC1Z3yPT9pUvX5ydhqOnp-Z3NNcx46jNiO5oA";
+    	String token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUwNzgyYmNmMGE5NzQxZTZiZjkwMjY2ZGMzNTY4YWE5MDc5MWYxNmYifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiTXRxZmJQN0t6ai1yN2JHT0tseC1oQSIsImF1ZCI6Ijg0ODIzMjUxMTI0MC03M3JpM3Q3cGx2azk2cGo0Zjg1dWo4b3RkYXQyYWxlbS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODA3OTQ1ODU2NTY4NDkyMzg3NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4NDgyMzI1MTEyNDAtNzNyaTN0N3Bsdms5NnBqNGY4NXVqOG90ZGF0MmFsZW0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6InNsYXNodHV0b3JpZWxAZ21haWwuY29tIiwiaWF0IjoxNDY5NTUxMjQzLCJleHAiOjE0Njk1NTQ4NDN9.IkrbESWfm_9_jg48z5wpe5UZexmv1r8qbrwFPFPuM-Qg4tyQiqAMG02wTON_TpE1j7Cu7pmFl5gBRbwGaABUKVe1WXE2ETkwr3eCKUQYLTZZZmaxtlum5lH8tOZUtowsyADoPplo3UB8OB7FkZhPjhLQUwNV4uEmInkGdDQ368AIgdXxnR_q7bHPRKsP2gBcnpa6pgRP7vQcCj-Wxd8UArShfQYrSnvRCaBtqfnmAbvTy7qU3qxiergMyY-qQ9y-2hjAMys9wXtruEpwRzul5NDbjNb_50s5sfGP6Ewnd6vTMksaDUqQOR7tjN-tHll3Ls9ervB21v9KyFAyGbTkwg";
 
     	OkHttpClient httpClient = new OkHttpClient(); 
     	
@@ -56,9 +42,8 @@ public class App
 //		    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     		
 		try {
-			AuthInfo auth = new GoogleLogin(httpClient).login(token); 
 			
-			PokemonGo go = new PokemonGo(auth,httpClient);
+			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient,token),httpClient);
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
 			//go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
 			//go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
@@ -96,8 +81,6 @@ public class App
 										}else{
 											System.out.println("Pokemon added to the collection, cp : " + p.getCp());
 										}
-	//									mail.sendMailForCapture(pokemon.getPokemonId().name(), 
-	//											go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount(),p.getCp());
 										found = true;
 										break;
 									}
@@ -133,7 +116,6 @@ public class App
 			}
 		} catch (LoginFailedException e) {
 			e.printStackTrace();
-			//mail.sendMailLoginException(e);
 		} catch (RemoteServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
