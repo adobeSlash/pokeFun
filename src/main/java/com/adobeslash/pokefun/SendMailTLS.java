@@ -50,7 +50,7 @@ public class SendMailTLS {
 		  });
 	}
 	
-	public void sendMailForCapture(String pokemonName, int pokeballNumber){
+	public void sendMailForCapture(String pokemonName, int pokeballNumber, int cp){
 		try {
 
 			Message message = new MimeMessage(session);
@@ -59,8 +59,8 @@ public class SendMailTLS {
 				InternetAddress.parse(username));
 			message.setSubject(MAIL_SUBJECT);
 			//TODO StringBuilder
-			message.setText("Pokemon catched : " + pokemonName + "/n "
-					+ "Remaining pokeball : " + pokeballNumber);
+			message.setText("Pokemon catched : " + pokemonName + " cp : " + 
+			cp + " /n Remaining pokeball : " + pokeballNumber);
 
 			Transport.send(message);
 

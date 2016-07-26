@@ -55,8 +55,6 @@ public class App
 						CatchResult result = pokemon.catchPokemon();
 						System.out.println("Attempt to catch:" + pokemon.getPokemonId() + " " + result.getStatus());
 						if(result.getStatus().equals(CatchStatus.CATCH_SUCCESS)){
-							mail.sendMailForCapture(pokemon.getPokemonId().name(), 
-									go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
 							long pokemonId = result.getCapturedPokemonId();
 							List<Pokemon> pkl =
 									go.getInventories().getPokebank().getPokemons();
@@ -71,6 +69,8 @@ public class App
 									}else{
 										System.out.println("Pokemon added to the collection, cp : " + p.getCp());
 									}
+									mail.sendMailForCapture(pokemon.getPokemonId().name(), 
+											go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount(),p.getCp());
 									found = true;
 									break;
 								}
