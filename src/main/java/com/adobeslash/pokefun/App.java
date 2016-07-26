@@ -35,7 +35,9 @@ public class App
 			AuthInfo auth = new GoogleLogin(httpClient).login(token); 
 			PokemonGo go = new PokemonGo(auth,httpClient);
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
-			go.setLocation(48.80962619260876, 2.134148, 0);
+			go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
+			//go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
+			//go.setLocation(48.856181844312594, 2.2977787494903623, 0); // Eiffel
 			System.out.println("location : " + go.getLatitude() + "-"
 					+ go.getLongitude() + "-"
 					+ go.getAltitude() + "-");
