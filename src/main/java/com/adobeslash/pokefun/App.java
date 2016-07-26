@@ -69,7 +69,7 @@ public class App
 												+p.getCp());
 										p.transferPokemon();
 									}else{
-										System.out.println("Pokemon added to the collection, cp > 300");
+										System.out.println("Pokemon added to the collection, cp : " + p.getCp());
 									}
 									found = true;
 									break;
