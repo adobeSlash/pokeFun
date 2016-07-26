@@ -84,7 +84,8 @@ public class App
 					}
 				}
 				
-				PokeHelper.lootNearestPokestop(go);			
+				PokeHelper.lootNearestPokestop(go);	
+				logger.info("end of scan...");
 			}
 		} catch (LoginFailedException e) {
 			logger.error(e.getLocalizedMessage());
