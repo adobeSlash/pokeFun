@@ -53,18 +53,10 @@ public class PokeMove extends Thread {
 			int i = 0;
 			for (; i < coordinates.size() - 1; i++) {
 				double[] nextPos = coordinates.get(i);
-				logger.info("aller au point suivant  : "
-						+ (int) distance(go.getLatitude(), go.getLongitude(), nextPos[1], nextPos[0]) + " metres index="
-						+ i);
-
 				moveTo(nextPos[0], nextPos[1]);
 			}
 			for (; i > 0; i--) {
 				double[] nextPos = coordinates.get(i);
-				logger.info("aller au point suivant  : "
-						+ (int) distance(go.getLatitude(), go.getLongitude(), nextPos[1], nextPos[0]) + " metres index="
-						+ i);
-
 				moveTo(nextPos[0], nextPos[1]);
 			}
 		}
