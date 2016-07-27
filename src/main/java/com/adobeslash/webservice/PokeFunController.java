@@ -26,7 +26,7 @@ public class PokeFunController {
 	
 	private PokemonGoFarmerBot farmer = null;
 	private PokemonGo go = null;
-	private String token = "ya29.Ci8tAyir3JayKM9qcoBoPctNd9zGRLF0iEDoXDlEy0jgLuzOEqqaxUBqdTlvZCwoyA";
+	private String token = "REPLACE WITH TOKEN";
 	
 	@RequestMapping("/liveStats")
     public LiveStats getLiveStats() throws LoginFailedException, RemoteServerException {
