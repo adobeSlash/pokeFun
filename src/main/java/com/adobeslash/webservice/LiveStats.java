@@ -13,14 +13,18 @@ import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
  */
 public class LiveStats {
 	
-	private final String username;
+	private String username;
 	private int level;
 	private int itemStorage;
 	private int pokeball;
 	private int superball;
 	private int hyperball;
+	private int amountOfPokemon;
 	
-
+	public LiveStats(){
+		
+	}
+	
 	public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
 		this.username = go.getPlayerProfile().getUsername();
 		updateStats(go);
@@ -33,6 +37,7 @@ public class LiveStats {
 		this.pokeball = go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount();
 		this.superball = go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount();
 		this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
+		this.amountOfPokemon = go.getInventories().getPokebank().getPokemons().size();
 	}
 
 	public String getUsername() {
@@ -77,6 +82,18 @@ public class LiveStats {
 
 	public void setHyperball(int hyperball) {
 		this.hyperball = hyperball;
+	}
+
+	public int getAmountOfPokemon() {
+		return amountOfPokemon;
+	}
+
+	public void setAmountOfPokemon(int amountOfPokemon) {
+		this.amountOfPokemon = amountOfPokemon;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 
