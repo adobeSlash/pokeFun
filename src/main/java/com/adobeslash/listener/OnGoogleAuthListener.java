@@ -22,7 +22,7 @@ public class OnGoogleAuthListener implements OnGoogleLoginOAuthCompleteListener{
 	}
 
 	public void onTokenIdReceived(GoogleAuthTokenJson googleAuthTokenJson) {
-		logger.info("Token result : " + googleAuthTokenJson);
+		logger.info("Token result : " + googleAuthTokenJson.getAccessToken());
 		this.googleAuthTokenJson = googleAuthTokenJson;
 	}
 	
