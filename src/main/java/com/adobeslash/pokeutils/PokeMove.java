@@ -50,7 +50,7 @@ public class PokeMove extends Thread {
 		List<double[]> coordinates = new KmlParser().getCoordinatesFromKml(itineraire);
 		logger.info("nombre de point  : " + coordinates.size());
 		while (true) {
-			int i = 325;
+			int i = 0;
 			for (; i < coordinates.size() - 1; i++) {
 				double[] nextPos = coordinates.get(i);
 				logger.info("aller au point suivant  : "
