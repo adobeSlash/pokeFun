@@ -19,7 +19,6 @@ public class LiveStats {
 	private int pokeball;
 	private int superball;
 	private int hyperball;
-	
 
 	public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
 		this.username = go.getPlayerProfile().getUsername();
