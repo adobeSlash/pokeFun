@@ -11,7 +11,14 @@ import com.pokegoapi.exceptions.RemoteServerException;
 public class PokeFunController {
 	
 	private PokemonGoFarmerBot farmer = null;
+	//TODO ajouter quelques service
+	//les infos sur les pokemon capturé pendant le run #PokeStats
+	//redemarrer le service
+	//position actuel
+	//changer l'itinerraire
+	//lancer une evolution pour un pokemon
 
+	//TODO mettre a jour les stats
 	@RequestMapping("/liveStats")
     public LiveStats getLiveStats() throws LoginFailedException, RemoteServerException {
 		if(farmer != null){
@@ -20,6 +27,7 @@ public class PokeFunController {
         return null;
     }
 	
+	//TODO renvoyer le code pour se logger
 	@RequestMapping("/start")
     public LiveStats startFarmerBot() throws LoginFailedException, RemoteServerException, InterruptedException {
 		if(farmer == null){
@@ -27,11 +35,6 @@ public class PokeFunController {
 			farmer.runBot();
 		}
 		return new LiveStats(farmer.go);
-    }
-	
-	@RequestMapping("/test")
-    public String test() {
-		return "test";
     }
 
 }
