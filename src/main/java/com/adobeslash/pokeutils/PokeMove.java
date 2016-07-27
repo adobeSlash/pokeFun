@@ -1,8 +1,13 @@
 package com.adobeslash.pokeutils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -21,7 +26,8 @@ public class PokeMove extends Thread {
     while (true) {
       try {
     	ArrayList<Pokestop> lesPokestops = new ArrayList<Pokestop>((ArrayList<Pokestop>) go.getMap().getMapObjects().getPokestops());
-        
+        List<String> itineraire = KmlParser.getCoordinatesFromKml("src/main/resources/itineraireTest.xml");
+    	
         Pokestop nearest = null;
         Double distance = null;
         for (Pokestop p : lesPokestops) {
@@ -49,7 +55,16 @@ public class PokeMove extends Thread {
       } catch (RemoteServerException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-      }
+      } catch (ParserConfigurationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SAXException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
   }
 
