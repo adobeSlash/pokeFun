@@ -1,15 +1,12 @@
 package com.adobeslash.pokeutils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.api.inventory.Item;
 import com.pokegoapi.api.map.fort.Pokestop;
-import com.pokegoapi.api.map.fort.PokestopLootResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.map.pokemon.EvolutionResult;
 import com.pokegoapi.api.pokemon.Pokemon;
@@ -17,8 +14,6 @@ import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
 import POGOProtos.Enums.PokemonIdOuterClass.PokemonId;
-import POGOProtos.Inventory.Item.ItemAwardOuterClass.ItemAward;
-import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
 
 public abstract class PokeHelper {
 	
