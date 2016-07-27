@@ -9,23 +9,21 @@ import com.pokegoapi.auth.GoogleCredentialProvider.OnGoogleLoginOAuthCompleteLis
 public class OnGoogleAuthListener implements OnGoogleLoginOAuthCompleteListener{
 	
 	final static Logger logger = Logger.getLogger(OnGoogleAuthListener.class);
-	private GoogleAuthTokenJson googleAuthTokenJson = null;
-
-	public OnGoogleAuthListener() {
-		// TODO Auto-generated constructor stub
-	}
+	private String googleAuthTokenJson = null;
 
 	public void onInitialOAuthComplete(GoogleAuthJson googleAuthJson) {
-		// TODO Auto-generated method stub
-		
+		logger.info("Waiting for the code " + googleAuthJson.getUserCode() + 
+				" to be put in " + googleAuthJson.getVerificationUrl());
+		googleAuthTokenJson = googleAuthJson.getUserCode();
 	}
 
+	//TODO writte the token into a file
 	public void onTokenIdReceived(GoogleAuthTokenJson googleAuthTokenJson) {
 		//TODO save this locally to futur usage
-		this.googleAuthTokenJson = googleAuthTokenJson;
+		logger.info("token obtained : " + googleAuthTokenJson.getAccessToken());
 	}
 	
-	public GoogleAuthTokenJson getRereshToken(){
+	public String getAuthToken(){
 		return googleAuthTokenJson;
 	}
 }

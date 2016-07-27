@@ -19,44 +19,34 @@ import com.pokegoapi.exceptions.RemoteServerException;
 import POGOProtos.Networking.Responses.CatchPokemonResponseOuterClass.CatchPokemonResponse.CatchStatus;
 import okhttp3.OkHttpClient;
 
-public class PokemonGoFarmerBot {
+public class PokemonGoFarmerBot extends Thread{
 	
-	final static Logger logger = Logger.getLogger(App.class);
+	final static Logger logger = Logger.getLogger(PokemonGoFarmerBot.class);
 	public PokemonGo go;
+	
+	public PokemonGoFarmerBot(PokemonGo go){
+		this.go = go;
+	}
 
-	public void runBot() throws InterruptedException{
-		OkHttpClient httpClient = new OkHttpClient(); 
-    	OnGoogleAuthListener authListener;
-    	
-    	//Proxy worldline...
-//		OkHttpClient httpClient = new OkHttpClient.Builder()
-//		    .connectTimeout(60, TimeUnit.SECONDS)
-//		    .writeTimeout(60, TimeUnit.SECONDS)
-//		    .readTimeout(60, TimeUnit.SECONDS)
-//		    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
+	public void run(){
     		
 		try {
-			authListener = new OnGoogleAuthListener();		
-			go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener),httpClient);
+			
 			PokeStats tracer = new PokeStats(go);
 			
-			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
-			//go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
-			go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
-			//go.setLocation(48.856181844312594, 2.2977787494903623, 0); // Eiffel
-			//go.setLocation(48.863492, 2.327494, 0); // Jardin des Tuileries
-			//go.setLocation(48.892416, 2.393335, 0); // La vilette
 			logger.info("location : " + go.getLatitude() + "-"
 					+ go.getLongitude() + "-"
 					+ go.getAltitude() + "-");
 			logger.info("profile : " + go.getPlayerProfile().getUsername());
 			
-			PokeMove pm = new PokeMove(go);
-			pm.start();
-			
 			while(true){
 				
-				Thread.sleep(10000);
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					logger.error(e.getLocalizedMessage());
+					return;
+				}
 				logger.info("start scan...");
 				
 				ArrayList <CatchablePokemon> catchables = (ArrayList<CatchablePokemon>) go.getMap().getCatchablePokemon();
@@ -83,9 +73,11 @@ public class PokemonGoFarmerBot {
 			}
 		} catch (LoginFailedException e) {
 			logger.error(e.getLocalizedMessage());
+			return;
 			
 		} catch (RemoteServerException e) {
 			logger.error(e.getLocalizedMessage());
+			return;
 		}
 	}
 

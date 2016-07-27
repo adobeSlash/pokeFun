@@ -15,7 +15,7 @@ public class LiveStats {
 	
 	private String username;
 	private int level;
-	private int itemStorage;
+	private int itemCount;
 	private int pokeball;
 	private int superball;
 	private int hyperball;
@@ -26,14 +26,14 @@ public class LiveStats {
 	}
 	
 	public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
-		this.username = go.getPlayerProfile().getUsername();
 		updateStats(go);
 	}
 	
 	public void updateStats(final PokemonGo go) throws LoginFailedException, RemoteServerException{
 		go.getInventories().updateInventories();
+		this.username = go.getPlayerProfile().getUsername();
 		this.level = go.getPlayerProfile().getStats().getLevel();
-		this.itemStorage = go.getPlayerProfile().getItemStorage();
+		this.itemCount = go.getInventories().getItemBag().getItemsCount();
 		this.pokeball = go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount();
 		this.superball = go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount();
 		this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
@@ -52,12 +52,12 @@ public class LiveStats {
 		this.level = level;
 	}
 
-	public int getItemStorage() {
-		return itemStorage;
+	public int getItemCount() {
+		return itemCount;
 	}
 
-	public void setItemStorage(int itemStorage) {
-		this.itemStorage = itemStorage;
+	public void setItemCount(int itemStorage) {
+		this.itemCount = itemStorage;
 	}
 
 	public int getPokeball() {
