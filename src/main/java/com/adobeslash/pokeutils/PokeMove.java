@@ -27,7 +27,7 @@ public class PokeMove extends Thread {
       try {
     	ArrayList<Pokestop> lesPokestops = new ArrayList<Pokestop>((ArrayList<Pokestop>) go.getMap().getMapObjects().getPokestops());
         //Longitude,Latitude
-    	List<String> itineraire = KmlParser.getCoordinatesFromKml("src/main/resources/itineraireTest.xml");
+    	List<double[]> itineraire = KmlParser.getCoordinatesFromKml("src/main/resources/itineraireTest.xml");
         	
         Pokestop nearest = null;
         Double distance = null;

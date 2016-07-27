@@ -15,7 +15,7 @@ import java.util.List;
 
 public class KmlParser {
 	
-	 public static List<String> getCoordinatesFromKml(String path) throws ParserConfigurationException, SAXException, IOException {
+	 public static List<double[]> getCoordinatesFromKml(String path) throws ParserConfigurationException, SAXException, IOException {
 
 			File fXmlFile = new File(path);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -29,13 +29,15 @@ public class KmlParser {
 			String positions = coordonnees.getTextContent();
 			
 			List<String> positionsList = Arrays.asList(positions.split(" "));
-			List<String> parsedList = new ArrayList<String>();
+			List<double[]> parsedList = new ArrayList<double[]>();
 			String[] parser;
 			
 			for (String coord : positionsList) {
 							
 				parser = coord.split(",");
-				String longLat = parser[0]+ ',' + parser[1];
+				double longitude = Double.parseDouble(parser[0]);
+				double latitude = Double.parseDouble(parser[1]);
+				double[] longLat = new double[] {longitude,latitude};
 				parsedList.add(longLat);				
 			}
 						
