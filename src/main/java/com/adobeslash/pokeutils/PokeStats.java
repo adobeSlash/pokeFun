@@ -6,6 +6,8 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.exceptions.LoginFailedException;
+import com.pokegoapi.exceptions.RemoteServerException;
 
 import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
 
@@ -28,7 +30,7 @@ public class PokeStats {
 		this.go = go;
 	}
 	
-	public void addPokemon(String name){
+	public void addPokemon(String name) throws LoginFailedException, RemoteServerException{
 		if(catched.containsKey(name)){
 			int amount = catched.get(name);
 			catched.replace(name, amount + 1);
@@ -45,17 +47,19 @@ public class PokeStats {
 		return catched;
 	}
 	
-	public void printStats(){
+	public void printStats() throws LoginFailedException, RemoteServerException{
 		Iterator it = catched.keySet().iterator();
 		logger.info("--------------------------- START STATS -----------------------");
 		while(it.hasNext()){
 			Object cle = it.next(); 
 			Object value = catched.get(cle); 
 			logger.info("Id : " + cle + " nb catched : " + value);
-			if(go != null){
-				logger.info("pokeball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
-				logger.info("superball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount());
-			}
+		}
+		if(go != null){
+			go.getInventories().updateInventories();
+			logger.info("pokeball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
+			logger.info("superball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount());
+			logger.info("Km walked : " + go.getPlayerProfile().getStats().getKmWalked());
 		}
 		logger.info("--------------------------- END STATS -----------------------");
 	}

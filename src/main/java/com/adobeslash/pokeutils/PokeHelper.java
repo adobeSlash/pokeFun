@@ -1,14 +1,17 @@
 package com.adobeslash.pokeutils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.inventory.Item;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.fort.PokestopLootResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.api.map.pokemon.EvolutionResult;
 import com.pokegoapi.api.pokemon.Pokemon;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
@@ -32,6 +35,28 @@ public abstract class PokeHelper {
 		}
 	}
 	
+	public static void makeThemEvolve(List<PokemonId> toEvolved, PokemonGo go) throws LoginFailedException, RemoteServerException{
+		for(PokemonId id : toEvolved){
+			makeItEvolve(go, id);
+		}
+	}
+	
+	public static void makeItEvolve(PokemonGo go, PokemonId id) throws LoginFailedException, RemoteServerException{
+		List<Pokemon> pkl =
+				go.getInventories().getPokebank().getPokemons();
+		for(Pokemon pokemon : pkl){
+			if(pokemon.getPokemonId().equals(id)){
+				EvolutionResult result = pokemon.evolve();
+				if(result.isSuccessful()){
+					logger.info("One of your pokemon has evolved");
+				}else{
+					logger.info("fail to evolve due to : " + result.getResult().name());
+					break;
+				}
+			}
+		}
+	}
+	
 	public static void askForTransfer(PokemonGo go, CatchablePokemon pokemon, PokeStats tracer) throws LoginFailedException, RemoteServerException{
 		Boolean found = false;
 		if(go.getInventories().getPokedex().getPokedexEntry(pokemon.getPokemonId()).getTimesCaptured() > 2){
@@ -39,13 +64,17 @@ public abstract class PokeHelper {
 					go.getInventories().getPokebank().getPokemons();
 			for(Pokemon p : pkl){
 				if(p.getPokemonId() == pokemon.getPokemonId()){
-					if(p.getCp() < REQUIRED_CP | p.getPokemonId().equals(PokemonId.DROWZEE)){
-						logger.info(p.getPokemonId().name() + " has been transfered because of low cp : " +p.getCp());
-						p.transferPokemon();
+					if(!p.getPokemonId().equals(PokemonId.PIDGEY) && !p.getPokemonId().equals(PokemonId.ZUBAT)){
+						if(p.getCp() < REQUIRED_CP | p.getPokemonId().equals(PokemonId.DROWZEE)){
+							logger.info(p.getPokemonId().name() + " has been transfered because of low cp : " +p.getCp());
+							p.transferPokemon();
+						}else{
+							logger.info("Pokemon added to the collection, cp : " + p.getCp());
+						}
+						logger.info("Candy for " + p.getPokemonId().name()+ " : " +p.getCandy());					
 					}else{
-						logger.info("Pokemon added to the collection, cp : " + p.getCp());
+						logger.info("Pokemon kept for evolution purpose");		
 					}
-					logger.info("Candy for " + p.getPokemonId().name()+ " : " +p.getCandy() + " ("+p.getCandiesToEvolve()+" to evolve)");					
 					found = true;
 					break;
 				}

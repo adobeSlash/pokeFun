@@ -13,6 +13,7 @@ import POGOProtos.Networking.Responses.CatchPokemonResponseOuterClass.CatchPokem
 
 import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokeutils.PokeHelper;
+import com.adobeslash.pokeutils.PokeMove;
 import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -35,7 +36,7 @@ public class App
 	
     public static void main( String[] args ) throws InterruptedException
     {
-    	PokeStats tracer = new PokeStats();
+    	
     	OkHttpClient httpClient = new OkHttpClient(); 
     	OnGoogleAuthListener authListener;
     	
@@ -49,11 +50,12 @@ public class App
 		try {
 			authListener = new OnGoogleAuthListener();		
 			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener),httpClient);
+			PokeStats tracer = new PokeStats(go);
 			
 			//go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
 			//go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
-			//go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
-			go.setLocation(48.856181844312594, 2.2977787494903623, 0); // Eiffel
+			go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
+			//go.setLocation(48.856181844312594, 2.2977787494903623, 0); // Eiffel
 			//go.setLocation(48.863492, 2.327494, 0); // Jardin des Tuileries
 			//go.setLocation(48.892416, 2.393335, 0); // La vilette
 			logger.info("location : " + go.getLatitude() + "-"
@@ -61,9 +63,12 @@ public class App
 					+ go.getAltitude() + "-");
 			logger.info("profile : " + go.getPlayerProfile().getUsername());
 			
+			PokeMove pm = new PokeMove(go);
+			pm.start();
+			
 			while(true){
 				
-				Thread.sleep(120000);
+				Thread.sleep(10000);
 				logger.info("start scan...");
 				
 				ArrayList <CatchablePokemon> catchables = (ArrayList<CatchablePokemon>) go.getMap().getCatchablePokemon();
@@ -85,7 +90,7 @@ public class App
 					}
 				}
 				
-				PokeHelper.lootNearestPokestop(go);	
+				//PokeHelper.lootNearestPokestop(go);	
 				logger.info("end of scan...");
 			}
 		} catch (LoginFailedException e) {
