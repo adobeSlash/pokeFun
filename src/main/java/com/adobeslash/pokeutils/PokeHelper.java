@@ -59,7 +59,7 @@ public abstract class PokeHelper {
 					go.getInventories().getPokebank().getPokemons();
 			for(Pokemon p : pkl){
 				if(p.getPokemonId() == pokemon.getPokemonId()){
-					if(!p.getPokemonId().equals(PokemonId.PIDGEY) && !p.getPokemonId().equals(PokemonId.ZUBAT)){
+					if(!p.getPokemonId().equals(PokemonId.PIDGEY)){
 						if(p.getCp() < REQUIRED_CP | p.getPokemonId().equals(PokemonId.DROWZEE)){
 							logger.info(p.getPokemonId().name() + " has been transfered because of low cp : " +p.getCp());
 							p.transferPokemon();

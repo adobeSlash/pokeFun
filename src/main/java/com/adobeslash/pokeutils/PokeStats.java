@@ -13,18 +13,20 @@ import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
 
 public class PokeStats {
 	
+	
 	final static Logger logger = Logger.getLogger(PokeStats.class);
+	private static PokeStats instance = null;
 	
 	private HashMap<String, Integer> catched;
 	private int totalAmount;
 	private PokemonGo go = null;
 
-	public PokeStats(){
+	protected PokeStats(){
 		catched = new HashMap<String, Integer>();
 		totalAmount = 0;
 	}
 	
-	public PokeStats(PokemonGo go){
+	protected PokeStats(PokemonGo go){
 		catched = new HashMap<String, Integer>();
 		totalAmount = 0;
 		this.go = go;
@@ -59,8 +61,22 @@ public class PokeStats {
 			go.getInventories().updateInventories();
 			logger.info("pokeball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount());
 			logger.info("superball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount());
+			logger.info("hyperball amount : " + go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount());
 			logger.info("Km walked : " + go.getPlayerProfile().getStats().getKmWalked());
 		}
 		logger.info("--------------------------- END STATS -----------------------");
 	}
+	
+	public static PokeStats getInstance(PokemonGo go) {
+		if (instance == null) {
+			// Thread Safe. Might be costly operation in some case
+			synchronized (PokeStats.class) {
+				if (instance == null) {
+					instance = new PokeStats(go);
+				}
+			}
+		}
+		return instance;
+	}
+
 }

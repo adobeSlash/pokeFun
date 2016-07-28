@@ -32,7 +32,7 @@ public class PokemonGoFarmerBot extends Thread{
     		
 		try {
 			
-			PokeStats tracer = new PokeStats(go);
+			PokeStats tracer = PokeStats.getInstance(go);
 			
 			logger.info("location : " + go.getLatitude() + "-"
 					+ go.getLongitude() + "-"

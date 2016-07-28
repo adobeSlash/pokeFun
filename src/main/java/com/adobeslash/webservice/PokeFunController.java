@@ -1,5 +1,7 @@
 package com.adobeslash.webservice;
 
+import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,9 +9,7 @@ import com.adobeslash.listener.GoogleAutoCredentialProvider;
 import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokefun.PokemonGoFarmerBot;
 import com.adobeslash.pokeutils.PokeMove;
-import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.auth.GoogleCredentialProvider;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -25,10 +25,13 @@ import okhttp3.OkHttpClient;
 @RestController
 public class PokeFunController {
 	
-	private PokemonGoFarmerBot farmer = null;
-	private PokemonGo go = null;
-	private String token = "ya29.Ci8tAyir3JayKM9qcoBoPctNd9zGRLF0iEDoXDlEy0jgLuzOEqqaxUBqdTlvZCwoyA";
+	final static Logger logger = Logger.getLogger(PokeFunController.class);
 	
+	private PokemonGoFarmerBot farmer = null;
+	private PokeMove pm = null;
+	private PokemonGo go = null;
+	
+	@CrossOrigin
 	@RequestMapping("/liveStats")
     public LiveStats getLiveStats() throws LoginFailedException, RemoteServerException {
 		if(go!= null){
@@ -37,11 +40,11 @@ public class PokeFunController {
         return null;
     }
 	
+	@CrossOrigin
 	@RequestMapping("/start")
     public LiveStats startFarmerBot() throws LoginFailedException, RemoteServerException, InterruptedException {
 		
 		OkHttpClient httpClient = new OkHttpClient(); 
-    	OnGoogleAuthListener authListener;
     	
     	//Proxy worldline...
 //			OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -49,21 +52,19 @@ public class PokeFunController {
 //			    .writeTimeout(60, TimeUnit.SECONDS)
 //			    .readTimeout(60, TimeUnit.SECONDS)
 //			    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
-    	
-    	authListener = new OnGoogleAuthListener();		
-    	//GoogleCredentialProvider gcp = new GoogleCredentialProvider(httpClient, authListener);
+ 
     	GoogleAutoCredentialProvider gcp = new GoogleAutoCredentialProvider(httpClient,
-    			"EMAIL", "MDP");
-    	//gcp.refreshToken(token);
+    			"slashtutoriel@gmail.com", "NOP");
 		go = new PokemonGo(gcp,httpClient);
 		go.setLocation(48.863492, 2.327494, 0);
 		
 		farmer = new PokemonGoFarmerBot(go);
 		farmer.start();
 		
-		PokeMove pm = new PokeMove(go);
+		pm = new PokeMove(go);
 		pm.start();
 		
+		logger.info("Service started, you are now connected");
 		return new LiveStats(go);
     }
 

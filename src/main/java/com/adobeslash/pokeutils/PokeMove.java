@@ -9,6 +9,7 @@ import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
+//TODO change french logs
 public class PokeMove extends Thread {
   final static Logger logger = Logger.getLogger(PokeMove.class);
   public PokemonGo go;

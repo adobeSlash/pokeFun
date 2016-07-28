@@ -1,5 +1,8 @@
 package com.adobeslash.webservice;
 
+import java.util.HashMap;
+
+import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
@@ -21,6 +24,8 @@ public class LiveStats {
 	private int hyperball;
 	private int amountOfPokemon;
 	
+	private HashMap<String, Integer> catched;
+	
 	public LiveStats(){
 		
 	}
@@ -38,6 +43,7 @@ public class LiveStats {
 		this.superball = go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount();
 		this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
 		this.amountOfPokemon = go.getInventories().getPokebank().getPokemons().size();
+		setCatched(PokeStats.getInstance(go).getCatched());
 	}
 
 	public String getUsername() {
@@ -94,6 +100,14 @@ public class LiveStats {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public HashMap<String, Integer> getCatched() {
+		return catched;
+	}
+
+	public void setCatched(HashMap<String, Integer> catched) {
+		this.catched = catched;
 	}
 	
 
