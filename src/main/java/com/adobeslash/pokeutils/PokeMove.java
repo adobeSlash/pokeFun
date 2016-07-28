@@ -169,7 +169,7 @@ public class PokeMove extends Thread {
 	}
 
 	public void moveTo(double lon, double lat) {
-		double meters = 6;
+		double meters = 3;
 		double inRadian = (180 / Math.PI) * (meters / 6378137);
 		// longitude avant car se sert de la latitude
 		while (distance(lat, go.getLongitude(), lat, lon) > 12) {
