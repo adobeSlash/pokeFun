@@ -20,13 +20,13 @@ import okhttp3.OkHttpClient;
 	//position actuel
 	//changer l'itinerraire
 	//lancer une evolution pour un pokemon
-	//Amount of pokemon doesn't update
+	//Amount of pokemon doesn't update directly...latence
 @RestController
 public class PokeFunController {
 	
 	private PokemonGoFarmerBot farmer = null;
 	private PokemonGo go = null;
-	private String token = "REPLACE WITH TOKEN";
+	private String token = "ya29.Ci8tAyir3JayKM9qcoBoPctNd9zGRLF0iEDoXDlEy0jgLuzOEqqaxUBqdTlvZCwoyA";
 	
 	@RequestMapping("/liveStats")
     public LiveStats getLiveStats() throws LoginFailedException, RemoteServerException {
@@ -50,7 +50,8 @@ public class PokeFunController {
 //			    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     	
     	authListener = new OnGoogleAuthListener();		
-    	GoogleCredentialProvider gcp = new GoogleCredentialProvider(httpClient, token);
+    	GoogleCredentialProvider gcp = new GoogleCredentialProvider(httpClient, authListener);
+    	//gcp.refreshToken(token);
 		go = new PokemonGo(gcp,httpClient);
 		go.setLocation(48.863492, 2.327494, 0);
 		
