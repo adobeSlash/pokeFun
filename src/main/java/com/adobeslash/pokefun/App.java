@@ -51,7 +51,7 @@ public class App {
       // go.setLocation(48.80962619260876, 2.134148, 0); //Gare RD
       
       // go.setLocation(48.8615963, 2.289282299999968, 0); // Parc du trocadero
-       go.setLocation(48.856181844312594, 2.2977787494903623, 0); //Eiffel
+       go.setLocation(48.857691709404655, 2.294715642929077, 0); //Eiffel pokestop
       // go.setLocation(48.863492, 2.327494, 0); // Jardin des Tuileries
       // go.setLocation(48.892416, 2.393335, 0); // La vilette
      //double[] start = new KmlParser().getCoordinatesFromKml(itineraire).get(0);

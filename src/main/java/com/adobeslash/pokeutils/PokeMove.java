@@ -83,42 +83,47 @@ public class PokeMove extends Thread {
 				List<Pokestop> lesPokestopALeure = new LinkedList<Pokestop>();
 				for (Pokestop p : lesPokestops) {
 					if (p.canLoot()) {
-						if (p.hasLurePokemon()) {
-							lesPokestopALeure.add(p);
-							logger.info("Y'a un leurre ici mec!");
-						}
+
 						p.loot();
 						logger.info("Looter le pokestop " + p.getDetails().getName());
 
 					} else {
+
 						if (p.canLoot(true)) {
-							double distanceTmp = distance(lesPokestops.get(0).getLatitude(),
-									lesPokestops.get(0).getLongitude(), go.getLatitude(), go.getLongitude());
+							double distanceTmp = distance(p.getLatitude(), p.getLongitude(), go.getLatitude(),
+									go.getLongitude());
 							if (nearest == null) {
 								nearest = p;
 								distance = distanceTmp;
 							} else {
-								distance = distanceTmp < distance ? distanceTmp : distance;
 								nearest = distanceTmp < distance ? p : nearest;
+								distance = distanceTmp < distance ? distanceTmp : distance;
+
 							}
 						}
 					}
+					if (p.inRange() && p.getFortData().getLureInfo().isInitialized()) {
+						lesPokestopALeure.add(p);
+						logger.info("Y'a un leurre au pokestop: " + p.getDetails().getName());
+					}
 				}
 				while (lesPokestopALeure.size() > 0) {
-					logger.info("OMG ya un leurre je reste ");
 					List<Pokestop> aSupr = new LinkedList<Pokestop>();
 					long minTime = Long.MAX_VALUE;
 
 					for (Pokestop p : lesPokestopALeure) {
 						if (p.canLoot())
 							p.loot();
-						if (!p.hasLurePokemon())
+						if (!(p.inRange() && p.getFortData().getLureInfo().isInitialized()))
 							aSupr.add(p);
 						minTime = Math.min(p.getCooldownCompleteTimestampMs(), minTime);
 					}
 					lesPokestopALeure.removeAll(aSupr);
 					if (lesPokestopALeure.size() > 0 && minTime != Long.MAX_VALUE) {
-						Thread.sleep(Math.max(minTime - System.currentTimeMillis(), 0));
+						logger.info(
+								"je vais attendre :  " + (Math.max(minTime - System.currentTimeMillis(), 0) + 1) / 1000
+										+ " secondes, il y a toujours un leurre ici");
+						Thread.sleep(Math.max(minTime - System.currentTimeMillis(), 0) + 1);
 					}
 				}
 				moveTo(nearest);
