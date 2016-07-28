@@ -2,6 +2,7 @@ package com.adobeslash.pokeutils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,7 +31,12 @@ public class PokeMove extends Thread {
 
 	public void run() {
 		if (itineraire == null)
-			runPokestop();
+			try {
+				runPokestop();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		else
 			try {
 				runItineraire();
@@ -63,7 +69,7 @@ public class PokeMove extends Thread {
 
 	}
 
-	public void runPokestop() {
+	public void runPokestop() throws InterruptedException {
 		while (true) {
 			try {
 				ArrayList<Pokestop> lesPokestops = new ArrayList<Pokestop>(
@@ -74,10 +80,16 @@ public class PokeMove extends Thread {
 
 				Pokestop nearest = null;
 				Double distance = null;
+				List<Pokestop> lesPokestopALeure = new LinkedList<Pokestop>();
 				for (Pokestop p : lesPokestops) {
 					if (p.canLoot()) {
+						if (p.hasLurePokemon()) {
+							lesPokestopALeure.add(p);
+							logger.info("Y'a un leurre ici mec!");
+						}
 						p.loot();
 						logger.info("Looter le pokestop " + p.getDetails().getName());
+
 					} else {
 						if (p.canLoot(true)) {
 							double distanceTmp = distance(lesPokestops.get(0).getLatitude(),
@@ -90,6 +102,23 @@ public class PokeMove extends Thread {
 								nearest = distanceTmp < distance ? p : nearest;
 							}
 						}
+					}
+				}
+				while (lesPokestopALeure.size() > 0) {
+					logger.info("OMG ya un leurre je reste ");
+					List<Pokestop> aSupr = new LinkedList<Pokestop>();
+					long minTime = Long.MAX_VALUE;
+
+					for (Pokestop p : lesPokestopALeure) {
+						if (p.canLoot())
+							p.loot();
+						if (!p.hasLurePokemon())
+							aSupr.add(p);
+						minTime = Math.min(p.getCooldownCompleteTimestampMs(), minTime);
+					}
+					lesPokestopALeure.removeAll(aSupr);
+					if (lesPokestopALeure.size() > 0 && minTime != Long.MAX_VALUE) {
+						Thread.sleep(Math.max(minTime - System.currentTimeMillis(), 0));
 					}
 				}
 				moveTo(nearest);
