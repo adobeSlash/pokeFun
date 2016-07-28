@@ -62,7 +62,13 @@
     <dependency>
         <groupId>com.github.Grover-c13</groupId>
         <artifactId>PokeGOAPI-Java</artifactId>
-        <version>0.2</version>
+        <version>master-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>com.github.svarzee</groupId>
+        <artifactId>gpsoauth-java</artifactId>
+        <version>v0.2.0</version>
     </dependency>
     
     <dependency>

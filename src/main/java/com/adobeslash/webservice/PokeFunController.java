@@ -3,6 +3,7 @@ package com.adobeslash.webservice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adobeslash.listener.GoogleAutoCredentialProvider;
 import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokefun.PokemonGoFarmerBot;
 import com.adobeslash.pokeutils.PokeMove;
@@ -50,7 +51,9 @@ public class PokeFunController {
 //			    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
     	
     	authListener = new OnGoogleAuthListener();		
-    	GoogleCredentialProvider gcp = new GoogleCredentialProvider(httpClient, authListener);
+    	//GoogleCredentialProvider gcp = new GoogleCredentialProvider(httpClient, authListener);
+    	GoogleAutoCredentialProvider gcp = new GoogleAutoCredentialProvider(httpClient,
+    			"EMAIL", "MDP");
     	//gcp.refreshToken(token);
 		go = new PokemonGo(gcp,httpClient);
 		go.setLocation(48.863492, 2.327494, 0);
