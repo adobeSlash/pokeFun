@@ -13,15 +13,16 @@ import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 
 //TODO ajouter quelques service
-	//les infos sur les pokemon capturé pendant le run #PokeStats
 	//redemarrer le service
 	//position actuel
 	//changer l'itinerraire
 	//lancer une evolution pour un pokemon
 	//Amount of pokemon doesn't update directly...latence
+	//Control if aready started in /start
 @RestController
 public class PokeFunController {
 	
@@ -30,21 +31,38 @@ public class PokeFunController {
 	private PokemonGoFarmerBot farmer = null;
 	private PokeMove pm = null;
 	private PokemonGo go = null;
+	private GoogleAutoCredentialProvider gcp = null;
+	private OkHttpClient httpClient = null;
 	
 	@CrossOrigin
 	@RequestMapping("/liveStats")
     public LiveStats getLiveStats() throws LoginFailedException, RemoteServerException {
 		if(go!= null){
-			return new LiveStats(go);
+			return new LiveStats(go, farmer.isAlive(), pm.isAlive());
 		}
         return null;
+    }
+	
+	@CrossOrigin
+	@RequestMapping("/stop")
+    public LiveStats stopFarmerBot() throws LoginFailedException, RemoteServerException {
+		LiveStats finalS = new LiveStats(go);
+		
+		pm.interrupt();
+		farmer.interrupt();
+		//TODO How to disconnect googlAccount ?
+		gcp = null;
+		go = null;
+		httpClient = null;
+		
+		return finalS;
     }
 	
 	@CrossOrigin
 	@RequestMapping("/start")
     public LiveStats startFarmerBot() throws LoginFailedException, RemoteServerException, InterruptedException {
 		
-		OkHttpClient httpClient = new OkHttpClient(); 
+		httpClient = new OkHttpClient(); 
     	
     	//Proxy worldline...
 //			OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -53,7 +71,7 @@ public class PokeFunController {
 //			    .readTimeout(60, TimeUnit.SECONDS)
 //			    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
  
-    	GoogleAutoCredentialProvider gcp = new GoogleAutoCredentialProvider(httpClient,
+    	gcp = new GoogleAutoCredentialProvider(httpClient,
     			"slashtutoriel@gmail.com", "NOP");
 		go = new PokemonGo(gcp,httpClient);
 		go.setLocation(48.863492, 2.327494, 0);

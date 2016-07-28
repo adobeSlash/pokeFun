@@ -24,6 +24,9 @@ public class LiveStats {
 	private int hyperball;
 	private int amountOfPokemon;
 	
+	private Boolean isFarmerAlive;
+	private Boolean isPokeMoveAlive;
+	
 	private HashMap<String, Integer> catched;
 	
 	public LiveStats(){
@@ -32,6 +35,12 @@ public class LiveStats {
 	
 	public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
 		updateStats(go);
+	}
+	
+	public LiveStats(final PokemonGo go, Boolean isFarmerAlive, Boolean isPokeMoveAlive) throws LoginFailedException, RemoteServerException {
+		updateStats(go);
+		this.isFarmerAlive = isFarmerAlive;
+		this.isPokeMoveAlive = isPokeMoveAlive;
 	}
 	
 	public void updateStats(final PokemonGo go) throws LoginFailedException, RemoteServerException{
@@ -108,6 +117,22 @@ public class LiveStats {
 
 	public void setCatched(HashMap<String, Integer> catched) {
 		this.catched = catched;
+	}
+
+	public Boolean getIsPokeMoveAlive() {
+		return isPokeMoveAlive;
+	}
+
+	public void setIsPokeMoveAlive(Boolean isPokeMoveAlive) {
+		this.isPokeMoveAlive = isPokeMoveAlive;
+	}
+
+	public Boolean getIsFarmerAlive() {
+		return isFarmerAlive;
+	}
+
+	public void setIsFarmerAlive(Boolean isFarmerAlive) {
+		this.isFarmerAlive = isFarmerAlive;
 	}
 	
 
