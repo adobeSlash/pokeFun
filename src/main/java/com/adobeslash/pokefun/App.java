@@ -1,13 +1,17 @@
 package com.adobeslash.pokefun;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.adobeslash.listener.GoogleAutoCredentialProvider;
 import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokeutils.KmlParser;
 import com.adobeslash.pokeutils.PokeHelper;
@@ -30,20 +34,18 @@ public class App {
 	public static void main(String[] args)
 			throws InterruptedException, ParserConfigurationException, SAXException, IOException {
 
-		OkHttpClient httpClient = new OkHttpClient();
+		// OkHttpClient httpClient = new OkHttpClient();
 		OnGoogleAuthListener authListener;
 
 		// Proxy worldline...
-		// OkHttpClient httpClient = new OkHttpClient.Builder()
-		// .connectTimeout(60, TimeUnit.SECONDS)
-		// .writeTimeout(60, TimeUnit.SECONDS)
-		// .readTimeout(60, TimeUnit.SECONDS)
-		// .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02",
-		// 3128))).build();
+		OkHttpClient httpClient = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
+				.writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS)
+				.proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("prx-dev02", 3128))).build();
 
 		try {
-			authListener = new OnGoogleAuthListener();
-			PokemonGo go = new PokemonGo(new GoogleCredentialProvider(httpClient, authListener), httpClient);
+			GoogleAutoCredentialProvider gcp = new GoogleAutoCredentialProvider(httpClient, "login", "mdp");
+			// gcp.refreshToken(token);
+			PokemonGo go = new PokemonGo(gcp, httpClient);
 			PokeStats tracer = new PokeStats(go);
 			String itineraire = "src/main/resources/itineraireTest.xml";
 			// go.setLocation( 48.8086335, 2.1335094999999455, 0); //Maison
