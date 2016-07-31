@@ -4,20 +4,16 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.adobeslash.listener.OnGoogleAuthListener;
 import com.adobeslash.pokeutils.PokeHelper;
-import com.adobeslash.pokeutils.PokeMove;
 import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.map.pokemon.EncounterResult;
-import com.pokegoapi.auth.GoogleCredentialProvider;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
 import POGOProtos.Networking.Responses.CatchPokemonResponseOuterClass.CatchPokemonResponse.CatchStatus;
-import okhttp3.OkHttpClient;
 
 public class PokemonGoFarmerBot extends Thread{
 	

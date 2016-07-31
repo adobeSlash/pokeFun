@@ -27,7 +27,11 @@ public class PokeMove extends Thread {
         Double distance = null;
         for (Pokestop p : lesPokestops) {
           if (p.canLoot()) {
+              try{
             p.loot();
+                        } catch (Exception e) {
+                  logger.info("sac plein");
+              }
             logger.info("Looter le pokestop " + p.getDetails().getName());
           } else {
             if (p.canLoot(true)) {
@@ -69,7 +73,7 @@ public class PokeMove extends Thread {
   }
 
   public void moveTo(Pokestop p) throws LoginFailedException, RemoteServerException {
-    // bouger 4 m par seconde pour que les pas soient compatibilisé
+        // bouger 4 m par seconde pour que les pas soient compatibilisé
 	  logger.info("aller au pokestop  : " + p.getDetails().getName() + " : " + 
     (int) distance(go.getLatitude(), p.getLongitude(), p.getLatitude(), p.getLongitude()) + " metres");
 

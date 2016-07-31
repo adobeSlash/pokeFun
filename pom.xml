@@ -19,6 +19,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
+    <start-class>com.adobeslash.pokefun.App</start-class>
   </properties>
   
   <repositories>
@@ -62,7 +63,7 @@
     <dependency>
         <groupId>com.github.Grover-c13</groupId>
         <artifactId>PokeGOAPI-Java</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>Development-6cec95d127-1</version>
     </dependency>
     
     <dependency>
@@ -87,6 +88,11 @@
         <artifactId>json-path</artifactId>
         <scope>test</scope>
     </dependency>
+    <dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>1.4</version>
+	</dependency>
     
   </dependencies>
   

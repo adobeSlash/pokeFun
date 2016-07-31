@@ -4,9 +4,8 @@ import org.apache.log4j.Logger;
 
 import com.pokegoapi.auth.GoogleAuthJson;
 import com.pokegoapi.auth.GoogleAuthTokenJson;
-import com.pokegoapi.auth.GoogleCredentialProvider.OnGoogleLoginOAuthCompleteListener;
 
-public class OnGoogleAuthListener implements OnGoogleLoginOAuthCompleteListener{
+public class OnGoogleAuthListener {
 	
 	final static Logger logger = Logger.getLogger(OnGoogleAuthListener.class);
 	private String googleAuthTokenJson = null;

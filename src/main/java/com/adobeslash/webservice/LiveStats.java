@@ -1,9 +1,13 @@
 package com.adobeslash.webservice;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import com.adobeslash.pokeutils.PokeStats;
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.inventory.Item;
+import com.pokegoapi.api.pokemon.Pokemon;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -28,6 +32,8 @@ public class LiveStats {
 	private Boolean isPokeMoveAlive;
 	
 	private HashMap<String, Integer> catched;
+    private List<Pokemon> myPokemon;
+    private Collection<Item> myBag;
 	
 	public LiveStats(){
 		
@@ -53,6 +59,8 @@ public class LiveStats {
 		this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
 		this.amountOfPokemon = go.getInventories().getPokebank().getPokemons().size();
 		setCatched(PokeStats.getInstance(go).getCatched());
+        this.myPokemon = go.getInventories().getPokebank().getPokemons();
+        this.myBag = go.getInventories().getItemBag().getItems();
 	}
 
 	public String getUsername() {
@@ -134,6 +142,13 @@ public class LiveStats {
 	public void setIsFarmerAlive(Boolean isFarmerAlive) {
 		this.isFarmerAlive = isFarmerAlive;
 	}
-	
+
+    public List<Pokemon> getMyPokemon() {
+        return myPokemon;
+    }
+
+    public Collection<Item> getMyBag() {
+        return myBag;
+    }
 
 }
