@@ -19,136 +19,136 @@ import POGOProtos.Inventory.Item.ItemIdOuterClass.ItemId;
  * Class use to send live stats through web Service
  */
 public class LiveStats {
-	
-	private String username;
-	private int level;
-	private int itemCount;
-	private int pokeball;
-	private int superball;
-	private int hyperball;
-	private int amountOfPokemon;
-	
-	private Boolean isFarmerAlive;
-	private Boolean isPokeMoveAlive;
-	
-	private HashMap<String, Integer> catched;
-    private List<Pokemon> myPokemon;
-    private Collection<Item> myBag;
-	
-	public LiveStats(){
-		
-	}
-	
-	public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
-		updateStats(go);
-	}
-	
-	public LiveStats(final PokemonGo go, Boolean isFarmerAlive, Boolean isPokeMoveAlive) throws LoginFailedException, RemoteServerException {
-		updateStats(go);
-		this.isFarmerAlive = isFarmerAlive;
-		this.isPokeMoveAlive = isPokeMoveAlive;
-	}
-	
-	public void updateStats(final PokemonGo go) throws LoginFailedException, RemoteServerException{
-		go.getInventories().updateInventories();
-		this.username = go.getPlayerProfile().getUsername();
-		this.level = go.getPlayerProfile().getStats().getLevel();
-		this.itemCount = go.getInventories().getItemBag().getItemsCount();
-		this.pokeball = go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount();
-		this.superball = go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount();
-		this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
-		this.amountOfPokemon = go.getInventories().getPokebank().getPokemons().size();
-		setCatched(PokeStats.getInstance(go).getCatched());
-        this.myPokemon = go.getInventories().getPokebank().getPokemons();
-        this.myBag = go.getInventories().getItemBag().getItems();
-	}
 
-	public String getUsername() {
-		return username;
-	}
+  private String username;
+  private int level;
+  private int itemCount;
+  private int pokeball;
+  private int superball;
+  private int hyperball;
+  private int amountOfPokemon;
 
-	public int getLevel() {
-		return level;
-	}
+  private Boolean isFarmerAlive;
+  private Boolean isPokeMoveAlive;
 
-	public void setLevel(int level) {
-		this.level = level;
-	}
+  private HashMap<String, Integer> catched;
+  private List<Pokemon> myPokemon;
+  private Collection<Item> myBag;
 
-	public int getItemCount() {
-		return itemCount;
-	}
+  public LiveStats() {
 
-	public void setItemCount(int itemStorage) {
-		this.itemCount = itemStorage;
-	}
+  }
 
-	public int getPokeball() {
-		return pokeball;
-	}
+  public LiveStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
+    updateStats(go);
+  }
 
-	public void setPokeball(int pokeball) {
-		this.pokeball = pokeball;
-	}
+  public LiveStats(final PokemonGo go, Boolean isFarmerAlive, Boolean isPokeMoveAlive) throws LoginFailedException, RemoteServerException {
+    updateStats(go);
+    this.isFarmerAlive = isFarmerAlive;
+    this.isPokeMoveAlive = isPokeMoveAlive;
+  }
 
-	public int getSuperball() {
-		return superball;
-	}
+  public void updateStats(final PokemonGo go) throws LoginFailedException, RemoteServerException {
+    go.getInventories().updateInventories();
+    this.username = go.getPlayerProfile().getPlayerData().getUsername();
+    this.level = go.getPlayerProfile().getStats().getLevel();
+    this.itemCount = go.getInventories().getItemBag().getItemsCount();
+    this.pokeball = go.getInventories().getItemBag().getItem(ItemId.ITEM_POKE_BALL).getCount();
+    this.superball = go.getInventories().getItemBag().getItem(ItemId.ITEM_GREAT_BALL).getCount();
+    this.hyperball = go.getInventories().getItemBag().getItem(ItemId.ITEM_ULTRA_BALL).getCount();
+    this.amountOfPokemon = go.getInventories().getPokebank().getPokemons().size();
+    setCatched(PokeStats.getInstance(go).getCatched());
+    this.myPokemon = go.getInventories().getPokebank().getPokemons();
+    this.myBag = go.getInventories().getItemBag().getItems();
+  }
 
-	public void setSuperball(int superball) {
-		this.superball = superball;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public int getHyperball() {
-		return hyperball;
-	}
+  public int getLevel() {
+    return level;
+  }
 
-	public void setHyperball(int hyperball) {
-		this.hyperball = hyperball;
-	}
+  public void setLevel(int level) {
+    this.level = level;
+  }
 
-	public int getAmountOfPokemon() {
-		return amountOfPokemon;
-	}
+  public int getItemCount() {
+    return itemCount;
+  }
 
-	public void setAmountOfPokemon(int amountOfPokemon) {
-		this.amountOfPokemon = amountOfPokemon;
-	}
+  public void setItemCount(int itemStorage) {
+    this.itemCount = itemStorage;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public int getPokeball() {
+    return pokeball;
+  }
 
-	public HashMap<String, Integer> getCatched() {
-		return catched;
-	}
+  public void setPokeball(int pokeball) {
+    this.pokeball = pokeball;
+  }
 
-	public void setCatched(HashMap<String, Integer> catched) {
-		this.catched = catched;
-	}
+  public int getSuperball() {
+    return superball;
+  }
 
-	public Boolean getIsPokeMoveAlive() {
-		return isPokeMoveAlive;
-	}
+  public void setSuperball(int superball) {
+    this.superball = superball;
+  }
 
-	public void setIsPokeMoveAlive(Boolean isPokeMoveAlive) {
-		this.isPokeMoveAlive = isPokeMoveAlive;
-	}
+  public int getHyperball() {
+    return hyperball;
+  }
 
-	public Boolean getIsFarmerAlive() {
-		return isFarmerAlive;
-	}
+  public void setHyperball(int hyperball) {
+    this.hyperball = hyperball;
+  }
 
-	public void setIsFarmerAlive(Boolean isFarmerAlive) {
-		this.isFarmerAlive = isFarmerAlive;
-	}
+  public int getAmountOfPokemon() {
+    return amountOfPokemon;
+  }
 
-    public List<Pokemon> getMyPokemon() {
-        return myPokemon;
-    }
+  public void setAmountOfPokemon(int amountOfPokemon) {
+    this.amountOfPokemon = amountOfPokemon;
+  }
 
-    public Collection<Item> getMyBag() {
-        return myBag;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public HashMap<String, Integer> getCatched() {
+    return catched;
+  }
+
+  public void setCatched(HashMap<String, Integer> catched) {
+    this.catched = catched;
+  }
+
+  public Boolean getIsPokeMoveAlive() {
+    return isPokeMoveAlive;
+  }
+
+  public void setIsPokeMoveAlive(Boolean isPokeMoveAlive) {
+    this.isPokeMoveAlive = isPokeMoveAlive;
+  }
+
+  public Boolean getIsFarmerAlive() {
+    return isFarmerAlive;
+  }
+
+  public void setIsFarmerAlive(Boolean isFarmerAlive) {
+    this.isFarmerAlive = isFarmerAlive;
+  }
+
+  public List<Pokemon> getMyPokemon() {
+    return myPokemon;
+  }
+
+  public Collection<Item> getMyBag() {
+    return myBag;
+  }
 
 }
